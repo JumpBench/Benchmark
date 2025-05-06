@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <mkdir dir="/Users/rkrsn/workspace/reagent/benchmark/elaborate/source/jakarta/dukes-bookstore/target"/>
+  <get skipexisting="true" src="https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.87/bin/apache-tomcat-9.0.87.zip" dest="/Users/rkrsn/workspace/reagent/benchmark/elaborate/source/jakarta/dukes-bookstore/target/apache-tomcat.zip"/>
+  <unzip src="/Users/rkrsn/workspace/reagent/benchmark/elaborate/source/jakarta/dukes-bookstore/target/apache-tomcat.zip" dest="/Users/rkrsn/workspace/reagent/benchmark/elaborate/source/jakarta/dukes-bookstore/target"/>
+</target>
+</project>
