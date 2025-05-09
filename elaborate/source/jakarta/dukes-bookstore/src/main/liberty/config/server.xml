@@ -1,0 +1,20 @@
+<server description="Liberty server for Dukes Bookstore">
+
+    <featureManager>
+        <feature>servlet-6.0</feature>
+        <feature>jsp-3.0</feature>
+        <feature>jsf-4.0</feature>
+        <feature>cdi-4.0</feature>
+        <feature>el-5.0</feature>
+        <feature>jaxrs-3.1</feature>
+        <feature>jpa-3.1</feature>
+    </featureManager>
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="9080"
+                  httpsPort="9443" />
+
+    <webApplication location="dukes-bookstore.war" contextRoot="/dukes-bookstore"/>
+
+</server>

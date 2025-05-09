@@ -14,8 +14,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tomcat.version>9.0.87</tomcat.version>
-        <tomcat.download.url>https://archive.apache.org/dist/tomcat/tomcat-9/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</tomcat.download.url>
+        <tomcat.version>10.1.24</tomcat.version> 
+        <tomcat.download.url>https://archive.apache.org/dist/tomcat/tomcat-10/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</tomcat.download.url>
         <tomcat.unpack.dir>${project.build.directory}/apache-tomcat-${tomcat.version}</tomcat.unpack.dir>
     </properties>
 
@@ -25,6 +25,16 @@
             <artifactId>jakarta.jakartaee-api</artifactId>
             <version>9.0.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.faces</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet-shaded</artifactId>
+            <version>5.1.0.Final</version>
         </dependency>
     </dependencies>
 
@@ -68,7 +78,7 @@
                 <version>1.10.6</version>
                 <configuration>
                     <container>
-                        <containerId>tomcat9x</containerId>
+                        <containerId>tomcat10x</containerId>
                         <type>installed</type>
                         <home>${tomcat.unpack.dir}</home>
                     </container>
