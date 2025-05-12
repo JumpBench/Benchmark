@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.FacesException;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.tutorial.dukesbookstore.ejb.BookRequestBean;
 import jakarta.tutorial.dukesbookstore.entity.Book;
@@ -26,18 +26,19 @@ import jakarta.tutorial.dukesbookstore.exception.BookNotFoundException;
 import jakarta.tutorial.dukesbookstore.exception.BooksNotFoundException;
 
 /**
- * <p>Backing bean for the <code>/bookstore.xhtml</code> page.</p>
+ * <p>
+ * Backing bean for the <code>/bookstore.xhtml</code> page.
+ * </p>
  */
 @Named("store")
 @SessionScoped
 public class BookstoreBean extends AbstractBean implements Serializable {
 
-    private static final Logger logger =
-            Logger.getLogger("dukesbookstore.web.managedBeans.BookStoreBean");
+    private static final Logger logger = Logger.getLogger("dukesbookstore.web.managedBeans.BookStoreBean");
     private static final long serialVersionUID = 7829793160074383708L;
     private Book featured = null;
     protected String title;
-    @EJB
+    @Inject
     BookRequestBean bookRequestBean;
 
     /**
@@ -58,13 +59,16 @@ public class BookstoreBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * <p>Add the featured item to our shopping cart.</p>
+     * <p>
+     * Add the featured item to our shopping cart.
+     * </p>
+     * 
      * @return the navigation page
      */
     public String add() {
         Book book = getFeatured();
         cart.add(book.getBookId(), book);
-        message(null, "ConfirmAdd", new Object[]{book.getTitle()});
+        message(null, "ConfirmAdd", new Object[] { book.getTitle() });
 
         return ("bookcatalog");
     }
@@ -72,11 +76,10 @@ public class BookstoreBean extends AbstractBean implements Serializable {
     public String addSelected() {
         logger.log(Level.INFO, "Entering BookstoreBean.addSelected");
         try {
-            String bookId = (String) context().getExternalContext().
-                    getSessionMap().get("bookId");
+            String bookId = (String) context().getExternalContext().getSessionMap().get("bookId");
             Book book = bookRequestBean.getBook(bookId);
             cart.add(bookId, book);
-            message(null, "ConfirmAdd", new Object[]{book.getTitle()});
+            message(null, "ConfirmAdd", new Object[] { book.getTitle() });
         } catch (BookNotFoundException e) {
             throw new FacesException("Could not get book: " + e);
         }
@@ -84,7 +87,10 @@ public class BookstoreBean extends AbstractBean implements Serializable {
     }
 
     /**
-     * <p>Show the details page for the featured book.</p>
+     * <p>
+     * Show the details page for the featured book.
+     * </p>
+     * 
      * @return the navigation page
      */
     public String details() {

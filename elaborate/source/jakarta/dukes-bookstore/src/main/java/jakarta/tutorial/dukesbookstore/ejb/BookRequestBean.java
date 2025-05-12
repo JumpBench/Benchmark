@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 import jakarta.ejb.EJBException;
 import jakarta.ejb.Stateful;
+import jakarta.enterprise.context.Dependent;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.tutorial.dukesbookstore.entity.Book;
@@ -29,15 +30,17 @@ import jakarta.tutorial.dukesbookstore.web.managedbeans.ShoppingCart;
 import jakarta.tutorial.dukesbookstore.web.managedbeans.ShoppingCartItem;
 
 /**
- * <p>Stateful session bean for the bookstore example.</p>
+ * <p>
+ * Stateful session bean for the bookstore example.
+ * </p>
  */
 @Stateful
+@Dependent // Make it available for CDI
 public class BookRequestBean {
 
     @PersistenceContext
     private EntityManager em;
-    private static final Logger logger =
-            Logger.getLogger("dukesbookstore.ejb.BookRequestBean");
+    private static final Logger logger = Logger.getLogger("dukesbookstore.ejb.BookRequestBean");
 
     public BookRequestBean() throws Exception {
     }
@@ -106,7 +109,7 @@ public class BookRequestBean {
                 } else {
                     throw new OrderException(
                             "Not enough of " + bookId
-                            + " in stock to complete order.");
+                                    + " in stock to complete order.");
                 }
             }
         } catch (OrderException ex) {

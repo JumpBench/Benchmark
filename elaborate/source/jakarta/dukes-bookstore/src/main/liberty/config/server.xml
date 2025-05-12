@@ -5,8 +5,22 @@
         <feature>cdi-4.0</feature>
         <feature>faces-4.0</feature>
         <feature>persistence-3.1</feature>
+        <feature>enterpriseBeans-4.0</feature>
         <feature>restfulWS-3.1</feature>
     </featureManager>
+
+    <library id="HSQLDBLib">
+        <fileset dir="${shared.resource.dir}" includes="hsqldb-*.jar" />
+    </library>
+
+    <dataSource id="bookstoreDS" jndiName="jdbc/bookstoreDS">
+        <jdbcDriver libraryRef="HSQLDBLib" />
+        <properties>
+            <url>jdbc:hsqldb:mem:bookstoreDB</url>
+            <user>sa</user>
+            <password></password>
+        </properties>
+    </dataSource>
 
     <httpEndpoint id="defaultHttpEndpoint"
         host="*"

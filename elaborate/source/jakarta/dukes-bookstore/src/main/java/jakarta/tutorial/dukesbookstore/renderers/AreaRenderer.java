@@ -12,7 +12,6 @@
 package jakarta.tutorial.dukesbookstore.renderers;
 
 import java.io.IOException;
-import java.util.Map;
 
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
@@ -107,16 +106,6 @@ public class AreaRenderer extends Renderer {
         return null;
     }
 
-    private void dumpComponentTree(UIComponent component, String indent) {
-        System.out.println(indent + component.getClass().getSimpleName() + " [id=" + component.getId() + "]");
-        for (UIComponent child : component.getChildren()) {
-            dumpComponentTree(child, indent + "  ");
-        }
-        for (Map.Entry<String, UIComponent> facet : component.getFacets().entrySet()) {
-            dumpComponentTree(facet.getValue(), indent + "  (facet:" + facet.getKey() + ") ");
-        }
-    }
-
     /**
      * <p>
      * Encode this component.
@@ -133,8 +122,6 @@ public class AreaRenderer extends Renderer {
             throw new NullPointerException();
         }
 
-        System.out.println("==== Component Tree Dump ====");
-        dumpComponentTree(context.getViewRoot(), "");
         AreaComponent area = (AreaComponent) component;
         UIComponent image = context.getViewRoot().findComponent("bookForm:mapImage");
         if (image == null) {
