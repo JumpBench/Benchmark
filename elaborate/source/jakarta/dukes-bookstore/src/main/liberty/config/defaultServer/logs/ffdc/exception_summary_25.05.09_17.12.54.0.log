@@ -1,6 +1,0 @@
-
- Index  Count  Time of first Occurrence    Time of last Occurrence     Exception SourceId ProbeId
-------+------+---------------------------+---------------------------+---------------------------
-     0      1   5/9/25, 17:12:54:271 EDT    5/9/25, 17:12:54:271 EDT  java.lang.NoClassDefFoundError com.ibm.ws.webcontainer.osgi.DynamicVirtualHost startWebApp
-                                                                            - /home/rkrsn/workspace/JUMP/Benchmark/elaborate/source/jakarta/dukes-bookstore/src/main/liberty/config/defaultServer/logs/ffdc/ffdc_25.05.09_17.12.54.0.log
-------+------+---------------------------+---------------------------+---------------------------
