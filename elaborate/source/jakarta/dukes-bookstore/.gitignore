@@ -1,0 +1,14 @@
+# Ignore everything under Liberty server config
+src/main/liberty/*
+
+# But keep key server configuration files
+!src/main/liberty/server.xml
+!src/main/liberty/bootstrap.properties
+!src/main/liberty/jvm.options
+!src/main/liberty/server.env
+
+!src/main/liberty/configDropins/
+!src/main/liberty/configDropins/**
+
+!src/main/liberty/resources/
+!src/main/liberty/resources/**
