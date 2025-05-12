@@ -41,6 +41,36 @@ http://localhost:9081/dukes-bookstore/
 
 > If needed, modify port or config via `src/main/liberty/config/server.xml`.
 
+---
+
+## 🐳 Running with Docker (Recommended)
+
+You can build and run the app entirely inside a Docker container.
+
+### 🔧 1. Build the Docker image
+
+Build the image:
+
+```bash
+docker build -t dukes-bookstore .
+```
+
+### 🚀 2. Run the container
+
+```bash
+docker run -p 9081:9081 dukes-bookstore
+```
+
+Then open in your browser:
+
+```
+http://localhost:9081/dukes-bookstore/
+```
+
+> The app will automatically build and start inside the container using Maven and Open Liberty.
+
+---
+
 ## 🗂️ Directory Layout
 
 ```
@@ -81,7 +111,6 @@ http://localhost:9081/dukes-bookstore/
     └── test
         └── java
 ```
-
 
 ## 🧰 Dependencies
 
