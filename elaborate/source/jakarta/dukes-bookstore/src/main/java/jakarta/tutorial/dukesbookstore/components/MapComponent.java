@@ -11,22 +11,32 @@
  */
 package jakarta.tutorial.dukesbookstore.components;
 
+import java.io.IOException;
+
 import jakarta.faces.component.FacesComponent;
 import jakarta.faces.component.UICommand;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
 import jakarta.tutorial.dukesbookstore.listeners.AreaSelectedEvent;
 
 /**
- * <p>{@link MapComponent} is a JavaServer Faces component that corresponds to a
+ * <p>
+ * {@link MapComponent} is a JavaServer Faces component that corresponds to a
  * client-side image map. It can have one or more children of type
  * {@link AreaComponent}, each representing hot spots, which a user can click on
- * and mouse over.</p>
+ * and mouse over.
+ * </p>
  *
- * <p>This component is a source of {@link AreaSelectedEvent} events, which are
- * fired whenever the current area is changed.</p>
+ * <p>
+ * This component is a source of {@link AreaSelectedEvent} events, which are
+ * fired whenever the current area is changed.
+ * </p>
  *
- * <p>Use of the javax.faces.component.StateHelper interface allows the use of
+ * <p>
+ * Use of the javax.faces.component.StateHelper interface allows the use of
  * expressions and also makes it unnecessary to implement saveState() and
- * restoreState().</p>
+ * restoreState().
+ * </p>
  */
 @FacesComponent("DemoMap")
 public class MapComponent extends UICommand {
@@ -34,27 +44,36 @@ public class MapComponent extends UICommand {
     private enum PropertyKeys {
         current;
     }
-    private final String current = null;
 
     public MapComponent() {
         super();
     }
 
-    /**
-     * @return the alternate text label for the currently selected child
-     * {@link AreaComponent}
-     */
+    @Override
+    public String getFamily() {
+        return "Map";
+    }
+
+    @Override
+    public boolean getRendersChildren() {
+        return true;
+    }
+
+    @Override
+    public void encodeChildren(FacesContext context) throws IOException {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        for (UIComponent child : getChildren()) {
+            child.encodeAll(context); // Renders the graphic image and area components
+        }
+    }
+
     public String getCurrent() {
         return (String) getStateHelper().eval(PropertyKeys.current, null);
     }
 
-    /**
-     * <p>Set the alternate text label for the currently selected child. If this
-     * is different from the previous value, fire an {@link AreaSelectedEvent}
-     * to interested listeners.</p>
-     *
-     * @param current The new alternate text label
-     */
     public void setCurrent(String current) {
         if (this.getParent() == null) {
             return;
@@ -63,23 +82,11 @@ public class MapComponent extends UICommand {
         String previous = (String) getStateHelper().get(current);
         getStateHelper().put(PropertyKeys.current, current);
 
-        // Fire an {@link AreaSelectedEvent} if appropriate
-        if ((previous == null) && (current == null)) {
-            // do nothing
-        } else if ((previous != null)
-                && (current != null)
-                && (previous.equals(current))) {
-            // do nothing
+        if ((previous == null && current == null) ||
+                (previous != null && previous.equals(current))) {
+            // no change
         } else {
             this.queueEvent(new AreaSelectedEvent(this));
         }
-    }
-
-    /**
-     * @return the component family for this component
-     */
-    @Override
-    public String getFamily() {
-        return ("Map");
     }
 }

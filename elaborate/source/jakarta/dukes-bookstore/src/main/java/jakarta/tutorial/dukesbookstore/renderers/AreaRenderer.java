@@ -12,8 +12,8 @@
 package jakarta.tutorial.dukesbookstore.renderers;
 
 import java.io.IOException;
+import java.util.Map;
 
-import jakarta.faces.FacesException;
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.context.ResponseWriter;
@@ -33,9 +33,56 @@ import jakarta.tutorial.dukesbookstore.model.ImageArea;
 @FacesRenderer(componentFamily = "Area", rendererType = "DemoArea")
 public class AreaRenderer extends Renderer {
 
+    public AreaRenderer() {
+    }
+
+    // Renderer Methods
+    /**
+     * <p>
+     * No decoding is required.
+     * </p>
+     *
+     * @param context   <code>FacesContext</code>for the current request
+     * @param component <code>UIComponent</code> to be decoded
+     */
     @Override
-    public boolean getRendersChildren() {
-        return true;
+    public void decode(FacesContext context, UIComponent component) {
+        if ((context == null) || (component == null)) {
+            throw new NullPointerException();
+        }
+    }
+
+    /**
+     * <p>
+     * No begin encoding is required.
+     * </p>
+     *
+     * @param context   <code>FacesContext</code>for the current request
+     * @param component <code>UIComponent</code> to be decoded
+     */
+    @Override
+    public void encodeBegin(FacesContext context, UIComponent component)
+            throws IOException {
+        if ((context == null) || (component == null)) {
+            throw new NullPointerException();
+        }
+    }
+
+    /**
+     * <p>
+     * No children encoding is required.
+     * </p>
+     *
+     * @param context   <code>FacesContext</code>for the current request
+     * @param component <code>UIComponent</code> to be decoded
+     * @throws java.io.IOException
+     */
+    @Override
+    public void encodeChildren(FacesContext context, UIComponent component)
+            throws IOException {
+        if ((context == null) || (component == null)) {
+            throw new NullPointerException();
+        }
     }
 
     private UIComponent findComponentRecursive(UIComponent base, String id) {
@@ -60,23 +107,42 @@ public class AreaRenderer extends Renderer {
         return null;
     }
 
+    private void dumpComponentTree(UIComponent component, String indent) {
+        System.out.println(indent + component.getClass().getSimpleName() + " [id=" + component.getId() + "]");
+        for (UIComponent child : component.getChildren()) {
+            dumpComponentTree(child, indent + "  ");
+        }
+        for (Map.Entry<String, UIComponent> facet : component.getFacets().entrySet()) {
+            dumpComponentTree(facet.getValue(), indent + "  (facet:" + facet.getKey() + ") ");
+        }
+    }
+
+    /**
+     * <p>
+     * Encode this component.
+     * </p>
+     *
+     * @param context   <code>FacesContext</code>for the current request
+     * @param component <code>UIComponent</code> to be decoded
+     * @throws java.io.IOException
+     */
     @Override
-    public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
-        if (context == null || component == null) {
+    public void encodeEnd(FacesContext context, UIComponent component)
+            throws IOException {
+        if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
 
+        System.out.println("==== Component Tree Dump ====");
+        dumpComponentTree(context.getViewRoot(), "");
         AreaComponent area = (AreaComponent) component;
-
-        // Delay resolution: component tree should be fully built now
-        UIComponent targetImage = findComponentRecursive(context.getViewRoot(), "mapImage");
-        if (targetImage == null) {
-            throw new FacesException("Could not find component with ID '" + area.getTargetImage() + "'");
+        UIComponent image = context.getViewRoot().findComponent("bookForm:mapImage");
+        if (image == null) {
+            throw new IllegalStateException(
+                    "Target image component with id '" + area.getTargetImage() + "' not found.");
         }
 
-        // String targetImageId = targetImage.getClientId(context);
-        String targetImageId = "mainForm:mapImage"; // hardcoded fallback
-
+        String targetImageId = image.getClientId(context);
         ImageArea iarea = (ImageArea) area.getValue();
         ResponseWriter writer = context.getResponseWriter();
         StringBuilder sb;
@@ -85,44 +151,62 @@ public class AreaRenderer extends Renderer {
         writer.writeAttribute("alt", iarea.getAlt(), "alt");
         writer.writeAttribute("coords", iarea.getCoords(), "coords");
         writer.writeAttribute("shape", iarea.getShape(), "shape");
-
-        sb = new StringBuilder("document.forms[0]['").append(targetImageId).append("'].src='")
-                .append(getURI(context, (String) area.getAttributes().get("onmouseout")))
-                .append("'");
+        sb = new StringBuilder("document.forms[0]['").append(targetImageId)
+                .append("'].src='");
+        sb.append(
+                getURI(context,
+                        (String) area.getAttributes().get("onmouseout")));
+        sb.append("'");
         writer.writeAttribute("onmouseout", sb.toString(), "onmouseout");
-
-        sb = new StringBuilder("document.forms[0]['").append(targetImageId).append("'].src='")
-                .append(getURI(context, (String) area.getAttributes().get("onmouseover")))
-                .append("'");
+        sb = new StringBuilder("document.forms[0]['").append(targetImageId)
+                .append("'].src='");
+        sb.append(
+                getURI(context,
+                        (String) area.getAttributes().get("onmouseover")));
+        sb.append("'");
         writer.writeAttribute("onmouseover", sb.toString(), "onmouseover");
-
-        sb = new StringBuilder("document.forms[0]['").append(getName(context, area)).append("'].value='")
-                .append(iarea.getAlt())
-                .append("'; document.forms[0].submit()");
+        sb = new StringBuilder("document.forms[0]['");
+        sb.append(getName(context, area));
+        sb.append("'].value='");
+        sb.append(iarea.getAlt());
+        sb.append("'; document.forms[0].submit()");
         writer.writeAttribute("onclick", sb.toString(), "value");
-
         writer.endElement("area");
     }
 
-    @Override
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
-        // no-op
-    }
-
+    /**
+     * <p>
+     * Return the calculated name for the hidden input field.
+     * </p>
+     *
+     * @param context   Context for the current request
+     * @param component Component we are rendering
+     */
     private String getName(FacesContext context, UIComponent component) {
         while (component != null) {
             if (component instanceof MapComponent) {
-                return component.getId() + "_current";
+                return (component.getId() + "_current");
             }
+
             component = component.getParent();
         }
-        throw new IllegalArgumentException("No parent MapComponent found");
+
+        throw new IllegalArgumentException();
     }
 
+    /**
+     * <p>
+     * Return the path to be passed into JavaScript for the specified value.
+     * </p>
+     *
+     * @param context Context for the current request
+     * @param value   Partial path to be (potentially) modified
+     */
     private String getURI(FacesContext context, String value) {
         if (value.startsWith("/")) {
-            return context.getExternalContext().getRequestContextPath() + value;
+            return (context.getExternalContext().getRequestContextPath() + value);
+        } else {
+            return (value);
         }
-        return value;
     }
 }

@@ -1,4 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' ?>
+<!--
+
+    Copyright (c), Eclipse Foundation, Inc. and its licensors.
+
+    All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Distribution License v1.0, which is available at
+    https://www.eclipse.org/org/documents/edl-v10.php
+
+    SPDX-License-Identifier: BSD-3-Clause
+
+-->
+<!DOCTYPE html
+          PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:h="jakarta.faces.html"
@@ -6,39 +21,26 @@
                 xmlns:bookstore="http://dukesbookstore"
                 template="./bookstoreTemplate.xhtml">
 
-    <ui:define name="top" />
-
+    <ui:define name="top"></ui:define>
     <ui:define name="content">
-        <h:form id="mainForm">
+
+        <h:form id="bookForm">
             <h:panelGrid columns="1"
                          title="#{bundle.ChooseBook}">
-
                 <h:outputText style="font-weight:bold"
                               value="#{bundle.ChooseBook}" />
 
-                <!-- ✅ Ensure mapImage is wrapped in real components -->
-                <h:panelGroup id="imageContainer"
-                              layout="block">
-                    <h:graphicImage id="mapImage"
-                                    name="book_all.jpg"
-                                    library="images"
-                                    alt="#{bundle.ChooseBook}"
-                                    usemap="#bookMap" />
-                </h:panelGroup>
-                <h:panelGroup rendered="#{not empty view.viewId}"> <!-- dummy render trigger -->
-                    <h:graphicImage id="mapImage"
-                                    name="book_all.jpg"
-                                    library="images"
-                                    alt="#{bundle.ChooseBook}"
-                                    usemap="#bookMap" />
-                </h:panelGroup>
-                <!-- ✅ Your custom map component with area definitions -->
+                <h:graphicImage id="mapImage"
+                                name="book_all.jpg"
+                                library="images"
+                                alt="#{bundle.ChooseBook}"
+                                usemap="#bookMap" />
+
                 <bookstore:map id="bookMap"
                                current="map1"
                                immediate="true"
                                action="bookstore">
                     <f:actionListener type="jakarta.tutorial.dukesbookstore.listeners.MapBookChangeListener" />
-
                     <bookstore:area id="map1"
                                     value="#{Book201}"
                                     onmouseover="resources/images/book_201.jpg"
@@ -70,8 +72,60 @@
                                     onmouseout="resources/images/book_all.jpg"
                                     targetImage="mapImage" />
                 </bookstore:map>
-
             </h:panelGrid>
+        </h:form>
+        <h:form>
+            <table id="links"
+                   columns="3"
+                   width="800"
+                   role="presentation">
+                <tr>
+                    <td>
+                        <h:commandLink id="Duke"
+                                       action="bookstore">
+                            <f:actionListener type="jakarta.tutorial.dukesbookstore.listeners.LinkBookChangeListener" />
+                            <h:outputText value="#{bundle.Book201}" />
+                        </h:commandLink>
+                    </td>
+                    <td>
+                        <h:commandLink id="Jeeves"
+                                       action="bookstore">
+                            <f:actionListener type="jakarta.tutorial.dukesbookstore.listeners.LinkBookChangeListener" />
+                            <h:outputText value="#{bundle.Book202}" />
+                        </h:commandLink>
+                    </td>
+                    <td>
+                        <h:commandLink id="Masterson"
+                                       action="bookstore">
+                            <f:actionListener type="jakarta.tutorial.dukesbookstore.listeners.LinkBookChangeListener" />
+                            <h:outputText value="#{bundle.Book203}" />
+                        </h:commandLink>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:commandLink id="Novation"
+                                       action="bookstore">
+                            <f:actionListener type="jakarta.tutorial.dukesbookstore.listeners.LinkBookChangeListener" />
+                            <h:outputText value="#{bundle.Book205}" />
+                        </h:commandLink>
+                    </td>
+                    <td>
+                        <h:commandLink id="Thrilled"
+                                       action="bookstore">
+                            <f:actionListener type="jakarta.tutorial.dukesbookstore.listeners.LinkBookChangeListener" />
+                            <h:outputText value="#{bundle.Book206}" />
+                        </h:commandLink>
+                    </td>
+                    <td>
+                        <h:commandLink id="Coding"
+                                       action="bookstore">
+                            <f:actionListener type="jakarta.tutorial.dukesbookstore.listeners.LinkBookChangeListener" />
+                            <h:outputText value="#{bundle.Book207}" />
+                        </h:commandLink>
+                    </td>
+                </tr>
+            </table>
         </h:form>
     </ui:define>
 </ui:composition>

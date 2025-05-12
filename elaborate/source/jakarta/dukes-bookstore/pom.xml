@@ -21,31 +21,31 @@
     </properties>
 
     <dependencies>
+        <!-- Jakarta EE 10 Full Platform API -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>10.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Open Liberty Runtime (for download/unzip by plugins like liberty-maven-plugin) -->
         <dependency>
             <groupId>io.openliberty</groupId>
             <artifactId>openliberty-runtime</artifactId>
             <version>25.0.0.4</version>
             <type>zip</type>
         </dependency>
-        <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
-            <version>9.0.0</version>
-            <scope>provided</scope>
-        </dependency>
+
+        <!-- HSQLDB (for dev or test database) -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.7.1</version> <!-- Use the version compatible with your app -->
+            <version>2.7.1</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/jakarta.ejb/jakarta.ejb-api -->
-        <dependency>
-            <groupId>jakarta.ejb</groupId>
-            <artifactId>jakarta.ejb-api</artifactId>
-            <version>4.0.1</version>
-        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
