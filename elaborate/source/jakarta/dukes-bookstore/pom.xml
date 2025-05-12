@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>jakarta.examples.tutorial.case-studies</groupId>
+    <artifactId>dukes-bookstore</artifactId>
+    <version>10-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name>dukes-bookstore</name>
+    <description>A sample bookstore application using Jakarta EE</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <tomcat.version>10.1.24</tomcat.version>
+        <tomcat.download.url>
+            https://archive.apache.org/dist/tomcat/tomcat-10/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</tomcat.download.url>
+        <tomcat.unpack.dir>${project.build.directory}/apache-tomcat-${tomcat.version}</tomcat.unpack.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.openliberty</groupId>
+            <artifactId>openliberty-runtime</artifactId>
+            <version>25.0.0.4</version>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>9.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.7.1</version> <!-- Use the version compatible with your app -->
+            <scope>runtime</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/jakarta.ejb/jakarta.ejb-api -->
+        <dependency>
+            <groupId>jakarta.ejb</groupId>
+            <artifactId>jakarta.ejb-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.8.2</version>
+                <configuration>
+                    <installVersion>25.0.0.3</installVersion> <!-- Add this -->
+                    <copyDependencies>
+                        <dependencyGroup>
+                            <location>${project.build.directory}/liberty/wlp/usr/shared/resources</location>
+                            <dependency>
+                                <groupId>org.hsqldb</groupId>
+                                <artifactId>hsqldb</artifactId>
+                            </dependency>
+                        </dependencyGroup>
+                    </copyDependencies>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-liberty</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>create</goal>
+                            <goal>install-feature</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <outputFileNameMapping>@{artifactId}@.@{extension}@</outputFileNameMapping>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
