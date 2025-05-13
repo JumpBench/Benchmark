@@ -1,5 +1,5 @@
 # Use Eclipse Temurin JDK 17 with Maven preinstalled
-FROM maven:3.9.6-eclipse-temurin-17
+FROM docker.io/maven:3.9.9-eclipse-temurin-24-alpine
 
 # Set working directory inside container
 WORKDIR /app
